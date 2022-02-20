@@ -1,7 +1,6 @@
 // https://www.instagram.com/simonahalep/?__a=1
 
-// full name: 
-const PROFILE_MOCK_DATA = {
+export const PROFILE_MOCK_DATA: any = {
   seo_category_infos: [
     ["Beauty", "beauty"],
     ["Dance & Performance", "dance_and_performance"],

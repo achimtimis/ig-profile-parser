@@ -1,4 +1,6 @@
-const API_PROFILE_RESPONSE_TO_OBJECT_ATTRIBUTE_MAPPING = {
+import { UserProfile } from "./UserProfile";
+
+export const PROFILE_RESPONSE_TO_OBJECT_ATTRIBUTE_PATH: UserProfile = {
     profilePicture: "graphql.user.profile_pic_url_hd",
     biography: "graphql.user.biography", 
     fullName: "graphql.user.full_name", 
@@ -11,5 +13,3 @@ const API_PROFILE_RESPONSE_TO_OBJECT_ATTRIBUTE_MAPPING = {
         type: "graphql.user.edge_owner_to_timeline_media.edges[0].node.__typename"
     }
 }
-
-module.exports.API_PROFILE_RESPONSE_TO_OBJECT_ATTRIBUTE_MAPPING = API_PROFILE_RESPONSE_TO_OBJECT_ATTRIBUTE_MAPPING;

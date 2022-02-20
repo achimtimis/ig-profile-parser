@@ -7,3 +7,7 @@
 
 ## Manual testing
 curl -i localhost:4000
+
+# Notes
+
+- it seems that when you hit the rate-limit of requests you start receiving HTTP 200 or HTTP 302 moved, with a location header which points to the login page

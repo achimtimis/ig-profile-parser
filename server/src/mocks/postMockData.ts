@@ -1,5 +1,5 @@
 // https://www.instagram.com/p/CZ9zjX3jI_l/?__a=1
-const POST_MOCK_DATA  = {
+export const POST_MOCK_DATA  = {
     "items": [
     {
     "taken_at": 1644858868,
@@ -230,5 +230,5 @@ const POST_MOCK_DATA  = {
     "num_results": 1,
     "more_available": false,
     "auto_load_more_enabled": false
-    }
+}
   
