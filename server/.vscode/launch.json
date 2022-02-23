@@ -8,7 +8,20 @@
         "request": "launch",
         "cwd": "${workspaceRoot}",
         "runtimeArgs": ["-r", "ts-node/register"],
-        "args": ["${workspaceRoot}/src/app-express.ts"]
+        "args": ["${workspaceRoot}/src/server.ts"]
+      },
+      {
+        "name": "Debug Jest Tests",
+        "type": "node",
+        "request": "launch",
+        "runtimeArgs": [
+          "--inspect-brk",
+          "${workspaceRoot}/node_modules/.bin/jest",
+          "--runInBand"
+        ],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "port": 9229
       }
     ]
   }

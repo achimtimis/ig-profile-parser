@@ -1,7 +1,7 @@
 export interface LatestPostInfo {
-  date?: string;
-  likeCount: string;
-  commentCount: string;
+  date?: number | string;
+  likeCount: number | string;
+  commentCount: number | string;
   caption: string;
   type: string;
 }
@@ -11,6 +11,6 @@ export interface UserProfile {
   profilePicture: string;
   biography: string;
   fullName: string;
-  followCount: string;
+  followCount: number | string;
   latestPost?: LatestPostInfo;
 }
