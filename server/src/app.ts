@@ -3,8 +3,9 @@ import express, { Application, Request, Response } from "express";
 import { extractUserProfileFromResponseBody } from "./models/apiResponseMapper";
 import { UserProfile } from "./models/instagramProfileModels";
 import { PROFILE_MOCK_DATA } from "./mocks/profileMockData";
-
+import cors from "cors";
 export const app: Application = express();
+
 const INSTAGRAM_URL_BASEPATH = "https://www.instagram.com/";
 const QUERY_PARAM = "?__a=1";
 const CONTENT_TYPE_HEADER_NAME = "content-type";
@@ -12,7 +13,12 @@ const CONTENT_TYPE_TEXT_HTML = "text/html";
 const CONTENT_TYPE_APPLICATION_JSON = "application/json";
 const HTTP_429_TOO_MANY_REQUESTS = 429;
 
+// cors configuration
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 // Body parsing Middleware
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

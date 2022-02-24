@@ -1,0 +1,41 @@
+body {
+  background-color: whitesmoke;
+}
+.content {
+  max-width: 35rem;
+  margin: auto;
+  margin-top: 10rem;
+  background: white;
+  padding: 10px;
+  border-style: groove;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.searchInput {
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    height: 2rem;
+    width: 20rem;
+    margin-right: 0.5rem;
+}
+
+.searchBtn {
+  border-radius: 10px;
+  border: 1px solid lightgray;
+  width: 10rem;
+  height: 2.4rem;
+  text-align: center;
+  margin-right: 2rem;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.profilesContent {
+
+}
