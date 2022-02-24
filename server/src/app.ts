@@ -21,18 +21,13 @@ app.get("/", async (req: Request, res: Response): Promise<Response> => {
   });
 });
 
-app.get("/ig-profile", async (req: Request, res: Response) => {
-  const userProfile = extractUserProfileFromResponseBody(PROFILE_MOCK_DATA);
-  if (userProfile) {
-    res.status(200);
-    res.send(userProfile);
-  }
-});
-
 app.get("/ig-profile/:handle", async (req: Request, res: Response) => {
   const { handle } = req.params;
   console.log(`"handle: ${handle}"`);
-  buildInstagramUserProfile(handle, res);
+  let useMock: boolean = queryStringToBoolean(req.query.useMock);
+  let noCache: boolean = queryStringToBoolean(req.query.noCache);
+  console.log(`Using mock: ${useMock} - using cache: ${noCache}`);
+  buildInstagramUserProfile(handle, useMock, noCache, res);
 });
 
 const getInstagramUserProfile = (handle: string): Promise<AxiosResponse> => {
@@ -41,7 +36,21 @@ const getInstagramUserProfile = (handle: string): Promise<AxiosResponse> => {
   return axios.get(url);
 };
 
-const buildInstagramUserProfile = async (handle: string, res: Response) => {
+const buildInstagramUserProfile = async (
+  handle: string,
+  useMock: boolean,
+  noCache: boolean,
+  res: Response
+) => {
+  if (useMock) {
+    const userProfile: UserProfile =
+      extractUserProfileFromResponseBody(PROFILE_MOCK_DATA);
+    res.status(200);
+    res.send(userProfile);
+    return;
+  }
+
+  // todo: handle cache logic
   getInstagramUserProfile(handle)
     .then((response: any) => {
       console.log(`Received statusCode: ${response.status}`);
@@ -92,4 +101,10 @@ const isRedirectToLoginResponse = (response): boolean => {
     result = false;
   }
   return result;
+};
+
+const queryStringToBoolean = (inputValue): boolean => {
+  return inputValue === undefined || inputValue?.toLowerCase() === "false"
+    ? false
+    : true;
 };

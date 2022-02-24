@@ -9,6 +9,10 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 // const mockedAxios = axios;
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 describe("Test the root path", () => {
   test("It should return HTTP 200", (done) => {
     request(app)
@@ -33,7 +37,7 @@ describe("Test the get instagram profile path", () => {
       .then((response) => {
         expect(response.statusCode).toBe(200);
         expect(response.body).toMatchObject(EXPECTED_PROFILE_RESPONSE);
-        expect(axios.get).toHaveBeenCalledWith(
+        expect(mockedAxios.get).toHaveBeenCalledWith(
           "https://www.instagram.com/simonahalep/?__a=1"
         );
         done();
@@ -52,24 +56,27 @@ describe("Test the get instagram profile path", () => {
       .then((response) => {
         expect(response.statusCode).toBe(200);
         expect(response.body).toMatchObject(EXPECTED_PROFILE_RESPONSE);
-        expect(axios.get).toHaveBeenCalledWith(
+        expect(mockedAxios.get).toHaveBeenCalledWith(
           "https://www.instagram.com/therock/?__a=1"
         );
         done();
       });
   });
-});
 
-describe("Test the get instagram profile with mocked data", () => {
-  test("It should respond with valid body", (done) => {
-    request(app)
-      .get("/ig-profile")
-      .then((response) => {
-        expect(response.statusCode).toBe(200);
-        expect(response.body).toMatchObject(EXPECTED_PROFILE_RESPONSE);
-        done();
-      });
-  });
+  test(
+    "When calling with useMock query param, it should respond with valid mock " +
+      "body and not have any outgoing http requests",
+    (done) => {
+      request(app)
+        .get("/ig-profile/therock?useMock=true")
+        .then((response) => {
+          expect(response.statusCode).toBe(200);
+          expect(response.body).toMatchObject(EXPECTED_PROFILE_RESPONSE);
+          expect(mockedAxios.get).not.toHaveBeenCalled();
+          done();
+        });
+    }
+  );
 });
 
 const buildInstagramResponseObject = (
