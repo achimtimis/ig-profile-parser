@@ -44,7 +44,7 @@ describe("Test the get instagram profile path", () => {
       });
   });
 
-  test("When instagram redirects to login (rate limited) it should respond with the correct mock fallback data", (done) => {
+  test("When instagram redirects to login (rate limited) it should respond with the correct 429 too many requests", (done) => {
     const mockInstagramResponse = buildInstagramResponseObject(
       200,
       { "content-type": "text/html" },
@@ -54,8 +54,8 @@ describe("Test the get instagram profile path", () => {
     request(app)
       .get("/ig-profile/therock")
       .then((response) => {
-        expect(response.statusCode).toBe(200);
-        expect(response.body).toMatchObject(EXPECTED_PROFILE_RESPONSE);
+        expect(response.statusCode).toBe(429);
+        expect(response.body).toMatchObject({status: "Too many requests. You have reached the instagram public API rate limit."});
         expect(mockedAxios.get).toHaveBeenCalledWith(
           "https://www.instagram.com/therock/?__a=1"
         );

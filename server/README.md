@@ -23,12 +23,29 @@ After a small number of requests originating from the same ip it seems that inst
 
 Rate limit mitigation solutions:
 
-1. Using `http proxies`. Example via curl: 
+1. Using an `http proxies` list out of which we can randomly assign to our requests:
+
+    Example via curl: 
 
     `curl -x "http://user:pwd@127.0.0.1:1234" "http://httpbin.org/ip"`
+    
+    or via Axios & Https-proxy-agent
+
+    ```
+    const HttpsProxyAgent = require("https-proxy-agent"),
+        axios = require("axios");
+
+    const httpsAgent = new HttpsProxyAgent({host: "proxyhost", port: "proxyport", auth: "username:password"})
+
+    axios = axios.create({httpsAgent})
+    // will use the proxy
+    await axios.get('https://instagram.com/simonahalep/?__a=1'); 
+    ```
 
 2. Using an instagram developer access token
 
-    tba
+    TBA
 
 3. Adding a server side cache layer
+
+    TBA

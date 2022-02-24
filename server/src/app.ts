@@ -10,6 +10,7 @@ const QUERY_PARAM = "?__a=1";
 const CONTENT_TYPE_HEADER_NAME = "content-type";
 const CONTENT_TYPE_TEXT_HTML = "text/html";
 const CONTENT_TYPE_APPLICATION_JSON = "application/json";
+const HTTP_429_TOO_MANY_REQUESTS = 429;
 
 // Body parsing Middleware
 app.use(express.json());
@@ -42,6 +43,7 @@ const buildInstagramUserProfile = async (
   noCache: boolean,
   res: Response
 ) => {
+  
   if (useMock) {
     const userProfile: UserProfile =
       extractUserProfileFromResponseBody(PROFILE_MOCK_DATA);
@@ -59,11 +61,9 @@ const buildInstagramUserProfile = async (
 
       // we are currently being rate limited
       if (isRedirectToLoginResponse(response)) {
-        // always use mock for now
-        body = PROFILE_MOCK_DATA;
-        console.log(
-          `Rate-limit reached! Using mock data for instagram handle: ${handle}`
-        );
+        res.status(HTTP_429_TOO_MANY_REQUESTS);
+        res.send({"status": "Too many requests. You have reached the instagram public API rate limit."});
+        return
       }
 
       if (body) {
