@@ -12,12 +12,20 @@ body {
   text-align: center;
 }
 
-.searchInput {
+.handleInput {
     border-radius: 10px;
     border: 1px solid lightgray;
     height: 2rem;
     width: 20rem;
     margin-right: 0.5rem;
+}
+
+.cookieInput {
+  border-radius: 10px;
+  border: 1px solid lightgray;
+  height: 4rem;
+  width: 34rem;
+  margin-right: 0.5rem;
 }
 
 .searchBtn {
@@ -30,6 +38,7 @@ body {
 }
 
 .searchBar {
+  text-align: left;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -37,5 +46,13 @@ body {
 }
 
 .profilesContent {
+  height: 30rem;
+  overflow-y: auto;
+}
 
+.configurationPanel {
+  text-align: left;
+  width: 30rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }

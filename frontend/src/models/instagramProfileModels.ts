@@ -1,5 +1,5 @@
 export interface LatestPostInfo {
-  date?: number | string;
+  date: number | string;
   likeCount: number | string;
   commentCount: number | string;
   caption: string;
@@ -7,10 +7,10 @@ export interface LatestPostInfo {
 }
 
 export interface UserProfile {
-  retrievalDate?: string;
+  retrievalDate: string;
   profilePicture: string;
   biography: string;
   fullName: string;
   followCount: number | string;
-  latestPost?: LatestPostInfo;
+  latestPost: LatestPostInfo;
 }

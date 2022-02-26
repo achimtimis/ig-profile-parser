@@ -12,13 +12,19 @@ const CONTENT_TYPE_HEADER_NAME = "content-type";
 const CONTENT_TYPE_TEXT_HTML = "text/html";
 const CONTENT_TYPE_APPLICATION_JSON = "application/json";
 const HTTP_429_TOO_MANY_REQUESTS = 429;
+const USER_AGENT_MOCK_HEADER = {
+  "user-agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.56",
+};
 
 // cors configuration
-app.use(cors({
-  origin: 'http://localhost:3000'
-}));
-// Body parsing Middleware
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 
+// Body parsing Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -33,23 +39,37 @@ app.get("/ig-profile/:handle", async (req: Request, res: Response) => {
   console.log(`"handle: ${handle}"`);
   let useMock: boolean = queryStringToBoolean(req.query.useMock);
   let noCache: boolean = queryStringToBoolean(req.query.noCache);
+  let cookie: string = req.query.igCookie as string;
   console.log(`Using mock: ${useMock} - using cache: ${noCache}`);
-  buildInstagramUserProfile(handle, useMock, noCache, res);
+  buildInstagramUserProfile(handle, useMock, noCache, res, cookie);
 });
 
-const getInstagramUserProfile = (handle: string): Promise<AxiosResponse> => {
+const getInstagramUserProfile = (
+  handle: string,
+  cookie: string | undefined
+): Promise<AxiosResponse> => {
   const url = `${INSTAGRAM_URL_BASEPATH}${handle}/${QUERY_PARAM}`;
   console.log(`Using url: ${url}`);
-  return axios.get(url);
+  if (cookie) {
+    console.log("User cookie was provided");
+    return axios.get(url, {
+      headers: {
+        ...USER_AGENT_MOCK_HEADER,
+        cookie: `${cookie}`,
+      },
+    });
+  } else {
+    return axios.get(url);
+  }
 };
 
 const buildInstagramUserProfile = async (
   handle: string,
   useMock: boolean,
   noCache: boolean,
-  res: Response
+  res: Response,
+  cookie: string
 ) => {
-  
   if (useMock) {
     const userProfile: UserProfile =
       extractUserProfileFromResponseBody(PROFILE_MOCK_DATA);
@@ -59,7 +79,7 @@ const buildInstagramUserProfile = async (
   }
 
   // todo: handle cache logic
-  getInstagramUserProfile(handle)
+  getInstagramUserProfile(handle, cookie)
     .then((response: any) => {
       console.log(`Received statusCode: ${response.status}`);
       let body: any = response.data;
@@ -68,8 +88,11 @@ const buildInstagramUserProfile = async (
       // we are currently being rate limited
       if (isRedirectToLoginResponse(response)) {
         res.status(HTTP_429_TOO_MANY_REQUESTS);
-        res.send({"status": "Too many requests. You have reached the instagram public API rate limit."});
-        return
+        res.send({
+          status:
+            "Too many requests. You have reached the instagram public API rate limit.",
+        });
+        return;
       }
 
       if (body) {
