@@ -1,5 +1,6 @@
 
 ## Instagram profile parser
+![App screnshot](ss1.png)
 ## Project description
 The goal of this project is to implement a full stack solution for parsing an instagram user profile data using the available public API. 
 ## Tech Stack
