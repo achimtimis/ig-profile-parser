@@ -1,6 +1,7 @@
 import { app } from "./app";
-const port = 4000;
+const port = process.env.PORT || 4000;
 
+console.log(process.env);
 try {
   app.listen(port, (): void => {
     console.log(`Connected successfully on port ${port}`);

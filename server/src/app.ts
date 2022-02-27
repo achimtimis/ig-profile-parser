@@ -1,10 +1,16 @@
 import axios, { AxiosResponse } from "axios";
 import express, { Application, Request, Response } from "express";
+import dotenv from "dotenv";
 import { extractUserProfileFromResponseBody } from "./models/apiResponseMapper";
 import { UserProfile } from "./models/instagramProfileModels";
 import { PROFILE_MOCK_DATA } from "./mocks/profileMockData";
+
 import cors from "cors";
 export const app: Application = express();
+dotenv.config();
+
+const ALLOWED_ORIGINS: string =
+  (process.env.ALLOWED_ORIGINS as string) || "http://localhost:3000";
 
 const INSTAGRAM_URL_BASEPATH = "https://www.instagram.com/";
 const QUERY_PARAM = "?__a=1";
@@ -20,7 +26,7 @@ const USER_AGENT_MOCK_HEADER = {
 // cors configuration
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ALLOWED_ORIGINS,
   })
 );
 

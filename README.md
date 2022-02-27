@@ -1,13 +1,26 @@
 
 ## Instagram profile parser
-#
 ## Project description
-The goal of this project is to implement a full stack solution for the product requirements above using the industry-standard best practices.
-#
+The goal of this project is to implement a full stack solution for parsing an instagram user profile data using the available public API. 
 ## Tech Stack
-- Frontend: Js + Typescript, React
-- Backend: Nodejs, Typescript, Express
-#
+- Frontend: Typescript, React
+- Backend: Typescript, Nodejs, Express
+## Build and run
+  #### Prerequisites: `docker`
+  ### Run backend & frontend apps:
+  ```
+  docker-componse up -d
+  ```
+  Access the ui at http://localhost:3000/. Default configurations like ports may be changed in the root `.env` file.
+
+  #### Clean up:
+  ```
+  docker-compose down --rmi all
+  ```
+
+  (For more indepth info, consult the README of both services).
+
+
 ## Product requirements
 
 1. A team of software engineers can productively collaborate on this codebase.
@@ -30,5 +43,7 @@ Instagram has a public, rate-limited API that returns a JSON response. To retrie
 - Account: https://www.instagram.com/simonahalep/?__a=1
 - Post: https://www.instagram.com/p/CZ9zjX3jI_l/?__a=1
 
-#
-## Solution description
+## Further improvements
+- return the profile image as base64 encoded from the server to workaround the same-origin-policy
+- introduce caching for the instagram profile call
+- find a solution to better scale the rate limiting mitigations

@@ -1,7 +1,7 @@
 ## Build and Run
 
 ### from source
-    npm start
+    npm start or PORT=XXXX npm start (default is 4000)
 
 ### or via Docker
 
@@ -23,7 +23,16 @@ After a small number of requests originating from the same ip it seems that inst
 
 Rate limit mitigation solutions:
 
-1. Using an `http proxies` list out of which we can randomly assign to our requests:
+1. Using the instagram cookie of an already logged in instagram user
+    ```
+    axios.get(url, { headers: {
+      "user-agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.56",
+      cookie: `${instagramCookie}`,
+        },
+    });
+    ```
+2. Using an `http proxies` list out of which we can randomly assign to our requests:
 
     Example via curl: 
 
@@ -32,20 +41,16 @@ Rate limit mitigation solutions:
     or via Axios & Https-proxy-agent
 
     ```
-    const HttpsProxyAgent = require("https-proxy-agent"),
-        axios = require("axios");
+    const httpsProxyAgent = import "https-proxy-agent",
+    const axios = import "axios";
 
-    const httpsAgent = new HttpsProxyAgent({host: "proxyhost", port: "proxyport", auth: "username:password"})
+    const httpsAgent = new httpsProxyAgent({host: "proxyhost", port: "proxyport", auth: "username:password"})
 
     axios = axios.create({httpsAgent})
     // will use the proxy
     await axios.get('https://instagram.com/simonahalep/?__a=1'); 
     ```
 
-2. Using an instagram developer access token
+3. Using an instagram developer access token
 
-    TBA
-
-3. Adding a server side cache layer
-
-    TBA
+    https://www.instagram.com/developer/

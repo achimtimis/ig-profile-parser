@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  ig-parser-backend:
+    build: ./server
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    environment:
+      - ALLOWED_ORIGINS=$CLIENT_ORIGIN
+    networks:
+      - backend
+      - frontend
+
+  ig-parser-frontend:
+    depends_on:
+      - ig-parser-backend
+    build:
+      context: ./frontend
+      args:
+        - REACT_APP_BACKEND_URL=$CLIENT_API_BASE_URL
+    ports:
+      - $REACT_LOCAL_PORT:$REACT_DOCKER_PORT
+    networks:
+      - frontend  
+
+networks:
+  backend:
+  frontend:

@@ -4,14 +4,15 @@ import UserProfileList from "./components/UserProfileList.component";
 import { ApiConfigOption } from "./models/ApiConfigOptions";
 import { UserProfile } from "./models/instagramProfileModels";
 
-const BACKEND_URL = "http://localhost:4000/ig-profile/";
+const BACKEND_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+const BACKEND_INSTAGRAM_PROFILE_URL = `${BACKEND_BASE_URL}/ig-profile/`;
 
 const getBackendUrl = (
   igHandle: string,
   isDemo: boolean,
   userCookie: string | null
 ): string => {
-  let url = `${BACKEND_URL}${igHandle}`;
+  let url = `${BACKEND_INSTAGRAM_PROFILE_URL}${igHandle}`;
   if (isDemo) {
     url += "?useMock=true";
   } else if (userCookie) {
