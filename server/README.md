@@ -41,8 +41,8 @@ Rate limit mitigation solutions:
     or via Axios & Https-proxy-agent
 
     ```
-    const httpsProxyAgent = import "https-proxy-agent",
-    const axios = import "axios";
+    import httpsProxyAgent from "https-proxy-agent",
+    import axios from "axios";
 
     const httpsAgent = new httpsProxyAgent({host: "proxyhost", port: "proxyport", auth: "username:password"})
 
