@@ -1,11 +1,11 @@
 import axios, { AxiosResponse } from "axios";
 import express, { Application, Request, Response } from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import { extractUserProfileFromResponseBody } from "./models/apiResponseMapper";
 import { UserProfile } from "./models/instagramProfileModels";
 import { PROFILE_MOCK_DATA } from "./mocks/profileMockData";
 
-import cors from "cors";
 export const app: Application = express();
 dotenv.config();
 

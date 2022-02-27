@@ -1,25 +1,9 @@
 import { useState } from "react";
+import { getInstagramUserProfile } from "./api/backendApi";
 import "./App.css";
 import UserProfileList from "./components/UserProfileList.component";
 import { ApiConfigOption } from "./models/ApiConfigOptions";
 import { UserProfile } from "./models/instagramProfileModels";
-
-const BACKEND_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
-const BACKEND_INSTAGRAM_PROFILE_URL = `${BACKEND_BASE_URL}/ig-profile/`;
-
-const getBackendUrl = (
-  igHandle: string,
-  isDemo: boolean,
-  userCookie: string | null
-): string => {
-  let url = `${BACKEND_INSTAGRAM_PROFILE_URL}${igHandle}`;
-  if (isDemo) {
-    url += "?useMock=true";
-  } else if (userCookie) {
-    url += `?igCookie=${userCookie}`;
-  }
-  return url;
-};
 
 function App() {
   let [handle, setHandle] = useState<string>("");
@@ -31,39 +15,24 @@ function App() {
     ApiConfigOption.USE_DEMO.toString()
   );
 
-  const fetchInstagramUserProfile = () => {
+  const fetchInstagramUserProfile = async () => {
     setError("");
     setIsloading(true);
-    console.log("fetching for " + handle);
-    fetch(
-      getBackendUrl(
-        handle,
-        retrievalOption === ApiConfigOption.USE_DEMO.toString(),
-        retrievalOption === ApiConfigOption.USE_USER_COOKIE.toString()
-          ? userCookie
-          : null
-      )
-    )
-      .then((response: Response) => {
-        if (!response.ok) {
-          throw new Error(`${response.status}-${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("success");
-        setProfileList([data, ...profileList]);
-        setIsloading(false);
-      })
-      .catch((error) => {
-        console.log("failure");
-        setError(error?.message);
-        setIsloading(false);
-      });
+    let { error, data } = await getInstagramUserProfile(
+      handle,
+      retrievalOption,
+      userCookie
+    );
+    if (error) {
+      setError(error);
+    } else if (data) {
+      setProfileList([data, ...profileList]);
+    }
+    setIsloading(false);
   };
 
   return (
-    <div className="content">
+    <div className="content" data-testid="content">
       <p>
         <b>Instagram user profile details</b>
       </p>
@@ -102,9 +71,11 @@ function App() {
               />
             </label>
           </>
-        )}       
-        @<input
+        )}
+        @
+        <input
           type="text"
+          data-testid="handle-input"
           maxLength={30}
           value={handle}
           onChange={(e) => setHandle(e.target.value)}
@@ -112,6 +83,7 @@ function App() {
           className="handleInput"
         />
         <button
+          data-testid="search-btn"
           disabled={isLoading || !handle}
           className="searchBtn"
           title={handle ? "Search" : "Please add a valid instagram handle"}

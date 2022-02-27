@@ -1,10 +1,21 @@
 import React from "react";
 import { UserProfile } from "../models/instagramProfileModels";
 
+const isValidDate = (d: any) => {
+  return d instanceof Date && !isNaN(d.valueOf());
+};
+const getDateTimeFromTimestamp = (timestamp: string | number): string => {
+  let result = "<unknown>";
+  const parsedDate = new Date(timestamp);
+  if (isValidDate(parsedDate)) {
+    result = parsedDate.toUTCString();
+  }
+  return result;
+};
+
 type UserProfileListProps = {
   profileList: UserProfile[];
 };
-
 export function UserProfileList({ profileList }: UserProfileListProps) {
   return (
     <>
@@ -38,7 +49,11 @@ export function UserProfle({ profile }: UserProfileProps) {
           {profile.fullName} {profile.biography ? "- " + profile.biography : ""}
         </p>
         <p>Followers count: {profile.followCount}</p>
-        <p><i>Latest Post at {new Date(profile.latestPost.date).toUTCString()}:</i></p>
+        <p>
+          <i>
+            Latest Post at {getDateTimeFromTimestamp(profile.latestPost.date)}:
+          </i>
+        </p>
         <p>
           {profile.latestPost?.caption} - {profile.latestPost?.type}.
         </p>
@@ -47,7 +62,7 @@ export function UserProfle({ profile }: UserProfileProps) {
           {profile.latestPost?.commentCount} comments.
         </p>
         <p>
-          <i> (retrieved {new Date(profile.retrievalDate).toUTCString()})</i>
+          <i> (retrieved {getDateTimeFromTimestamp(profile.retrievalDate)})</i>
         </p>
         <hr style={{ borderTop: "1px dotted" }} />
       </>
